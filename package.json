@@ -1,7 +1,7 @@
 {
-  "name": "backend-mesto",
+  "name": "express-mesto-gha",
   "version": "1.0.0",
-  "description": "[![Tests](../../actions/workflows/tests-13-sprint.yml/badge.svg)](../../actions/workflows/tests-13-sprint.yml) [![Tests](../../actions/workflows/tests-14-sprint.yml/badge.svg)](../../actions/workflows/tests-14-sprint.yml)\r # Проект Mesto фронтенд + бэкенд",
+  "description": "",
   "main": "app.js",
   "scripts": {
     "lint": "npx eslint",
@@ -10,15 +10,15 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/CheNikos/backend-mesto.git"
+    "url": "git+https://github.com/CheNikos/express-mesto-gha.git"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "bugs": {
-    "url": "https://github.com/CheNikos/backend-mesto/issues"
+    "url": "https://github.com/CheNikos/express-mesto-gha/issues"
   },
-  "homepage": "https://github.com/CheNikos/backend-mesto#readme",
+  "homepage": "https://github.com/CheNikos/express-mesto-gha#readme",
   "dependencies": {
     "express": "^4.18.2",
     "mongoose": "^7.0.0"
