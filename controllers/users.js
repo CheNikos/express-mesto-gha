@@ -15,7 +15,7 @@ const createUser = (req, res) => {
         res.status(500).send({ message: "На сервере произошла ошибка" });
       }
     });
-}
+};
 
 const getUsers = (req, res) => {
   userSchema
@@ -24,7 +24,7 @@ const getUsers = (req, res) => {
     .catch(() =>
       res.status(500).send({ message: "На сервере произошла ошибка" })
     );
-}
+};
 
 const getUser = (req, res) => {
   const { id } = req.params;
@@ -45,7 +45,7 @@ const getUser = (req, res) => {
         res.status(500).send({ message: "На сервере произошла ошибка" });
       }
     });
-}
+};
 
 const setUserInfo = (req, res) => {
   const { name, about } = req.body;
@@ -77,7 +77,7 @@ const setUserInfo = (req, res) => {
 
       return res.status(500).send({ message: "На сервере произошла ошибка" });
     });
-}
+};
 
 const setUserAvatar = (req, res) => {
   const { avatar } = req.body;
@@ -109,7 +109,7 @@ const setUserAvatar = (req, res) => {
 
       return res.status(500).send({ message: "На сервере произошла ошибка" });
     });
-}
+};
 
 module.exports = {
   createUser,
