@@ -12,16 +12,16 @@ mongoose.connect("mongodb://127.0.0.1:27017/mestodb");
 
 const { PORT = 3000 } = process.env;
 
-app.use(routeUsers);
-app.use(routeCards);
-
 app.use((req, res, next) => {
   req.user = {
-    _id: '6402d8f4b46374ee0d7a88bd'
+    _id: '6402f472271a1b6654cc67c4'
   };
 
   next();
 });
+
+app.use(routeUsers);
+app.use(routeCards);
 
 app.use((req, res) => {
   res

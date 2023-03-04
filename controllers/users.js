@@ -5,7 +5,7 @@ const createUser = (req, res) => {
 
   userSchema
     .create({ name, about, avatar })
-    .then((user) => res.send({ data: user }))
+    .then((user) => res.send(user))
     .catch((err) => {
       if (err.name === "ValidationError") {
         res.status(400).send({
@@ -20,7 +20,7 @@ const createUser = (req, res) => {
 const getUsers = (req, res) => {
   userSchema
     .find({})
-    .then((users) => res.send({ data: users }))
+    .then((users) => res.send(users))
     .catch(() =>
       res.status(500).send({ message: "На сервере произошла ошибка" })
     );
@@ -32,7 +32,7 @@ const getUser = (req, res) => {
   userSchema
     .findById(id)
     .then((user) => {
-      if (user) return res.send({ data: user });
+      if (user) return res.send(user);
 
       return res.status(404).send({ message: "Пользователь не найден" });
     })
@@ -64,7 +64,7 @@ const setUserInfo = (req, res) => {
       }
     )
     .then((user) => {
-      if (user) return res.send({ data: user });
+      if (user) return res.send(user);
 
       return res.status(404).send({ message: "Пользователь не найден" });
     })
@@ -94,7 +94,7 @@ const setUserAvatar = (req, res) => {
     }
   )
     .then((user) => {
-      if (user) return res.send({ data: user });
+      if (user) return res.send(user);
 
       return res
         .status(404)

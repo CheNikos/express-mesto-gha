@@ -1,9 +1,57 @@
 const cardSchema = require("../models/card");
 
+const getCards = (req, res) => {
+  cardSchema
+    .find({})
+    .then((cards) => res.send(cards))
+    .catch(() =>
+      res.status(500).send({ message: "На сервере произошла ошибка" })
+    );
+};
+
 const createCard = (req, res) => {
-  console.log(req.user._id);
+  const { name, link } = req.body;
+  const owner = req.user._id;
+
+  cardSchema
+    .create({ name, link, owner })
+    .then((card) => res.send(card))
+    .catch((err) => {
+      if (err.name === "ValidationError") {
+        res.status(400).send({
+          message: "Переданы некорректные данные при создании карточки",
+        });
+      } else {
+        res.status(500).send({ message: "На сервере произошла ошибка" });
+      }
+    });
+};
+
+const deleteCard = (req, res) => {
+  const { cardId } = req.params;
+
+  cardSchema
+    .findById(cardId)
+    .then((card) => {
+      if (card) return res.send(card);
+
+      return res
+        .status(404)
+        .send({ message: "Карточка с указанным id не найдена" });
+    })
+    .catch((err) => {
+      if (err.name === "ValidationError") {
+        res.status(400).send({
+          message: "Переданы некорректные данные при создании пользователя",
+        });
+      } else {
+        res.status(500).send({ message: "На сервере произошла ошибка" });
+      }
+    });
 };
 
 module.exports = {
-  createCard
+  createCard,
+  getCards,
+  deleteCard,
 };
