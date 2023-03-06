@@ -16,3 +16,10 @@
 `npm run dev` — запускает сервер с hot-reload
 
 https://github.com/CheNikos/express-mesto-gha
+
+## Установка
+
+Клонировать репозиторий: git@github.com:CheNikos/express-mesto-gha.git
+Установить зависимости: npm i
+Запустить приложение в режиме разработки: npm run start — запускает сервер
+npm run dev — запускает сервер с hot-reload
