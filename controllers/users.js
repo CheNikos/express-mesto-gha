@@ -27,10 +27,10 @@ const getUsers = (req, res) => {
 };
 
 const getUser = (req, res) => {
-  const { id } = req.params;
+  const { _id: userId } = req.user;
 
   userSchema
-    .findById(id)
+    .findById(userId)
     .then((user) => {
       if (user) return res.send(user);
 
@@ -83,16 +83,17 @@ const setUserAvatar = (req, res) => {
   const { avatar } = req.body;
   const { _id: userId } = req.user;
 
-  User.findByIdAndUpdate(
-    userId,
-    {
-      avatar,
-    },
-    {
-      new: true,
-      runValidators: true,
-    }
-  )
+  userSchema
+    .findByIdAndUpdate(
+      userId,
+      {
+        avatar,
+      },
+      {
+        new: true,
+        runValidators: true,
+      }
+    )
     .then((user) => {
       if (user) return res.send(user);
 

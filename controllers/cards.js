@@ -31,7 +31,7 @@ const deleteCard = (req, res) => {
   const { cardId } = req.params;
 
   cardSchema
-    .findById(cardId)
+    .findByIdAndRemove(cardId)
     .then((card) => {
       if (card) return res.send(card);
 
@@ -50,7 +50,7 @@ const deleteCard = (req, res) => {
     });
 };
 
-function likeCard(req, res) {
+const likeCard = (req, res) => {
   const { cardId } = req.params;
   const { _id: userId } = req.user;
 
@@ -84,7 +84,7 @@ function likeCard(req, res) {
     });
 }
 
-function dislikeCard(req, res) {
+const dislikeCard = (req, res) => {
   const { cardId } = req.params;
   const { _id: userId } = req.user;
 
