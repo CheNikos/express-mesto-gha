@@ -1,12 +1,10 @@
-const cardSchema = require("../models/card");
+const cardSchema = require('../models/card');
 
 const getCards = (req, res) => {
   cardSchema
     .find({})
     .then((cards) => res.send(cards))
-    .catch(() =>
-      res.status(500).send({ message: "На сервере произошла ошибка" })
-    );
+    .catch(() => res.status(500).send({ message: 'На сервере произошла ошибка' }));
 };
 
 const createCard = (req, res) => {
@@ -17,12 +15,12 @@ const createCard = (req, res) => {
     .create({ name, link, owner })
     .then((card) => res.send(card))
     .catch((err) => {
-      if (err.name === "ValidationError") {
+      if (err.name === 'ValidationError') {
         res.status(400).send({
-          message: "Переданы некорректные данные при создании карточки",
+          message: 'Переданы некорректные данные при создании карточки',
         });
       } else {
-        res.status(500).send({ message: "На сервере произошла ошибка" });
+        res.status(500).send({ message: 'На сервере произошла ошибка' });
       }
     });
 };
@@ -37,15 +35,15 @@ const deleteCard = (req, res) => {
 
       return res
         .status(404)
-        .send({ message: "Карточка с указанным id не найдена" });
+        .send({ message: 'Карточка с указанным id не найдена' });
     })
     .catch((err) => {
-      if (err.name === "ValidationError") {
+      if (err.name === 'ValidationError') {
         res.status(400).send({
-          message: "Переданы некорректные данные при создании пользователя",
+          message: 'Переданы некорректные данные при создании пользователя',
         });
       } else {
-        res.status(500).send({ message: "На сервере произошла ошибка" });
+        res.status(500).send({ message: 'На сервере произошла ошибка' });
       }
     });
 };
@@ -64,25 +62,25 @@ const likeCard = (req, res) => {
       },
       {
         new: true,
-      }
+      },
     )
     .then((card) => {
       if (card) return res.send(card);
 
       return res
         .status(404)
-        .send({ message: "Карточка с указанным id не найдена" });
+        .send({ message: 'Карточка с указанным id не найдена' });
     })
     .catch((err) => {
-      if (err.name === "ValidationError") {
+      if (err.name === 'ValidationError') {
         return res.status(400).send({
-          message: "Переданы некорректные данные добавления лайка",
+          message: 'Переданы некорректные данные добавления лайка',
         });
       }
 
-      return res.status(500).send({ message: "На сервере произошла ошибка" });
+      return res.status(500).send({ message: 'На сервере произошла ошибка' });
     });
-}
+};
 
 const dislikeCard = (req, res) => {
   const { cardId } = req.params;
@@ -98,25 +96,25 @@ const dislikeCard = (req, res) => {
       },
       {
         new: true,
-      }
+      },
     )
     .then((card) => {
       if (card) return res.send(card);
 
       return res
         .status(400)
-        .send({ message: "Карточка с указанным id не найдена" });
+        .send({ message: 'Карточка с указанным id не найдена' });
     })
     .catch((err) => {
-      if (err.name === "ValidationError") {
+      if (err.name === 'ValidationError') {
         return res
           .status(400)
-          .send({ message: "Переданы некорректные данные для снятия лайка" });
+          .send({ message: 'Переданы некорректные данные для снятия лайка' });
       }
 
-      return res.status(500).send({ message: "На сервере произошла ошибка" });
+      return res.status(500).send({ message: 'На сервере произошла ошибка' });
     });
-}
+};
 
 module.exports = {
   createCard,
