@@ -25,7 +25,7 @@ const getUsers = (req, res) => {
 };
 
 const getUser = (req, res) => {
-  const { _id: userId } = req.user;
+  const { userId } = req.params;
 
   userSchema
     .findById(userId)
