@@ -1,4 +1,5 @@
 const mongoose = require('mongoose');
+const validator = require('validator');
 
 const { Schema } = mongoose;
 
@@ -21,6 +22,10 @@ const userSchema = new Schema(
     avatar: {
       type: String,
       required: true,
+      validate: {
+        validator: (url) => validator.isURL(url),
+        message: 'Неправильный формат ссылки',
+      },
     },
   },
   {
