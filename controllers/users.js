@@ -34,15 +34,7 @@ const getUser = (req, res) => {
 
       return res.status(404).send({ message: 'Пользователь не найден' });
     })
-    .catch((err) => {
-      if (err.name === 'ValidationError') {
-        res.status(400).send({
-          message: 'Переданы некорректные данные при создании пользователя',
-        });
-      } else {
-        res.status(500).send({ message: 'На сервере произошла ошибка' });
-      }
-    });
+    .catch(() => res.status(400).send({ message: 'Переданы некорректные данные при создании пользователя' }));
 };
 
 const setUserInfo = (req, res) => {
