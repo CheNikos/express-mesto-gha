@@ -27,6 +27,22 @@ const userSchema = new Schema(
         message: 'Неправильный формат ссылки',
       },
     },
+
+    email: {
+      type: String,
+      required: true,
+      minlength: 2,
+      maxlength: 30,
+      validate: {
+        validator: (email) => validator.isEmail(email),
+        message: 'Неправильный адрес почты',
+      },
+    },
+
+    password: {
+      type: String,
+      required: true,
+    },
   },
   {
     versionKey: false,
