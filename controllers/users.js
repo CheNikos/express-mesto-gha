@@ -23,6 +23,10 @@ const createUser = (req, res) => {
     });
 };
 
+const login = (req, res) => {
+  res.status(200).send({ message: 'login ok' });
+};
+
 const getUsers = (req, res) => {
   userSchema
     .find({})
@@ -118,4 +122,5 @@ module.exports = {
   getUser,
   setUserInfo,
   setUserAvatar,
+  login,
 };
