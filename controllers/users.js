@@ -1,15 +1,21 @@
+const bcrypt = require('bcrypt');
 const userSchema = require('../models/user');
 
 const createUser = (req, res) => {
-  const { name, about, avatar } = req.body;
+  const {
+    name, about, avatar, email, password,
+  } = req.body;
 
-  userSchema
-    .create({ name, about, avatar })
+  bcrypt
+    .hash(password, 10)
+    .then((hash) => userSchema.create({
+      name, about, avatar, email, password: hash,
+    }))
     .then((user) => res.send(user))
     .catch((err) => {
-      if (err.name === 'ValidationError') {
-        res.status(400).send({
-          message: 'Переданы некорректные данные при создании пользователя',
+      if (err.code === 11000) {
+        res.status(409).send({
+          message: 'Пользователь с таким email уже существует',
         });
       } else {
         res.status(500).send({ message: 'На сервере произошла ошибка' });
@@ -34,7 +40,11 @@ const getUser = (req, res) => {
 
       return res.status(404).send({ message: 'Пользователь не найден' });
     })
-    .catch(() => res.status(400).send({ message: 'Переданы некорректные данные при создании пользователя' }));
+    .catch(() => res
+      .status(400)
+      .send({
+        message: 'Переданы некорректные данные при создании пользователя',
+      }));
 };
 
 const setUserInfo = (req, res) => {

@@ -10,6 +10,7 @@ const userSchema = new Schema(
       required: true,
       minlength: 2,
       maxlength: 30,
+      default: 'Жак-Ив Кусто',
     },
 
     about: {
@@ -17,11 +18,13 @@ const userSchema = new Schema(
       required: true,
       minlength: 2,
       maxlength: 30,
+      default: 'Исследователь',
     },
 
     avatar: {
       type: String,
       required: true,
+      default: 'https://pictures.s3.yandex.net/resources/jacques-cousteau_1604399756.png',
       validate: {
         validator: (url) => validator.isURL(url),
         message: 'Неправильный формат ссылки',
@@ -33,6 +36,7 @@ const userSchema = new Schema(
       required: true,
       minlength: 2,
       maxlength: 30,
+      unique: true,
       validate: {
         validator: (email) => validator.isEmail(email),
         message: 'Неправильный адрес почты',
