@@ -24,7 +24,17 @@ const createUser = (req, res) => {
 };
 
 const login = (req, res) => {
-  res.status(200).send({ message: 'login ok' });
+  const {
+    email, password,
+  } = req.body;
+
+  // TODO: реализовать проверку пароля и вернуть jwt. Вебинар 1.27
+
+  userSchema
+    .findOne({ email })
+    .orFail(() => res.status(404).send({ message: 'Пользователь не найден' }))
+    .then((user) => res.send(user))
+    .catch(() => res.status(500).send({ message: 'На сервере произошла ошибка' }));
 };
 
 const getUsers = (req, res) => {
