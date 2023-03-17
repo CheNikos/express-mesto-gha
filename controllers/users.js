@@ -45,6 +45,21 @@ const login = (req, res) => {
     .catch(() => res.status(500).send({ message: 'На сервере произошла ошибка' }));
 };
 
+const getCurrentUser = (req, res) => {
+  const { authorization } = req.headers;
+  if (!authorization || !authorization.startsWith('Bearer')) {
+    res.status(401).send({ message: 'Необходима авторизация' });
+  }
+
+  const jwt = authorization.replace('Bearer ', '');
+  try {
+    const payload = jsonwebtoken.verify(jwt, 'secret-key');
+    res.send(payload);
+  } catch (err) {
+    res.status(401).send({ message: 'Необходима авторизация' });
+  }
+};
+
 const getUsers = (req, res) => {
   userSchema
     .find({})
@@ -141,4 +156,5 @@ module.exports = {
   setUserInfo,
   setUserAvatar,
   login,
+  getCurrentUser,
 };
