@@ -1,6 +1,6 @@
 const bcrypt = require('bcrypt');
-const userSchema = require('../models/user');
 const jsonwebtoken = require('jsonwebtoken');
+const userSchema = require('../models/user');
 
 const createUser = (req, res) => {
   const {
