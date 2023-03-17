@@ -1,5 +1,6 @@
 const bcrypt = require('bcrypt');
 const userSchema = require('../models/user');
+const jsonwebtoken = require('jsonwebtoken');
 
 const createUser = (req, res) => {
   const {
@@ -28,12 +29,19 @@ const login = (req, res) => {
     email, password,
   } = req.body;
 
-  // TODO: реализовать проверку пароля и вернуть jwt. Вебинар 1.27
-
   userSchema
     .findOne({ email })
     .orFail(() => res.status(404).send({ message: 'Пользователь не найден' }))
-    .then((user) => res.send(user))
+    .then((user) => bcrypt.compare(password, user.password).then((matched) => {
+      if (matched) {
+        return user;
+      }
+      return res.status(404).send({ message: 'Пользователь не найден' });
+    }))
+    .then((user) => {
+      const jwt = jsonwebtoken.sign({ _id: user._id }, 'secret-key', { expiresIn: '7d' });
+      res.send({ user, jwt });
+    })
     .catch(() => res.status(500).send({ message: 'На сервере произошла ошибка' }));
 };
 
