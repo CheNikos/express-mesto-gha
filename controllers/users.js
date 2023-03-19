@@ -45,19 +45,10 @@ const login = (req, res) => {
     .catch(() => res.status(500).send({ message: 'На сервере произошла ошибка' }));
 };
 
-const getCurrentUser = (req, res) => {
-  const { authorization } = req.headers;
-  if (!authorization || !authorization.startsWith('Bearer')) {
-    res.status(401).send({ message: 'Необходима авторизация' });
-  }
-
-  const jwt = authorization.replace('Bearer ', '');
-  try {
-    const payload = jsonwebtoken.verify(jwt, 'secret-key');
-    res.send(payload);
-  } catch (err) {
-    res.status(401).send({ message: 'Необходима авторизация' });
-  }
+const getCurrentUser = (req, res, next) => {
+  userSchema.findById(req.user._id)
+    .then((users) => res.send(users))
+    .catch(next);
 };
 
 const getUsers = (req, res) => {

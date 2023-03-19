@@ -5,6 +5,7 @@ const auth = (req, res, next) => {
   if (!authorization || !authorization.startsWith('Bearer')) {
     res.status(401).send({ message: 'Необходима авторизация' });
   }
+
   const jwt = authorization.replace('Bearer ', '');
   let payload;
   try {
