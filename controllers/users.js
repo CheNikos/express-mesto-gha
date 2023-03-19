@@ -30,7 +30,7 @@ const login = (req, res) => {
   } = req.body;
 
   userSchema
-    .findOne({ email })
+    .findOne({ email }).select('+password')
     .orFail(() => res.status(404).send({ message: 'Пользователь не найден' }))
     .then((user) => bcrypt.compare(password, user.password).then((matched) => {
       if (matched) {
