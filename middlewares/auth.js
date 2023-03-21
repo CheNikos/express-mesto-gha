@@ -12,7 +12,7 @@ const auth = (req, res, next) => {
   try {
     payload = jsonwebtoken.verify(jwt, 'secret-key');
   } catch (err) {
-    throw new UnauthorizedErr('Необходима авторизация');
+    return next(new UnauthorizedErr('Необходима авторизация'));
   }
   req.user = payload;
   next();
