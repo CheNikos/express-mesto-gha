@@ -1,7 +1,8 @@
 class UnauthorizedErr extends Error {
-  constructor(message) {
-    super(message);
-    this.statusCode = 401;
+  constructor(status = 401, message = 'Необходима авторизация') {
+    super();
+    this.status = status;
+    this.message = message;
   }
 }
 module.exports = UnauthorizedErr;

@@ -1,5 +1,6 @@
 const express = require('express');
 const mongoose = require('mongoose');
+const helmet = require('helmet');
 const bodyParser = require('body-parser');
 const { celebrate, Joi } = require('celebrate');
 
@@ -35,6 +36,7 @@ app.post('/signup', celebrate({
 }), createUser);
 
 app.use(auth);
+app.use(helmet());
 
 app.use(routeUsers);
 app.use(routeCards);
