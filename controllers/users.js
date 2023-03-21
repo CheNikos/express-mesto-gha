@@ -18,14 +18,14 @@ const createUser = (req, res, next) => {
       name, about, avatar, email, password: hash,
     }))
     .then((user) => res.send(user))
-    // eslint-disable-next-line consistent-return
     .catch((err) => {
       if (err.code === 11000) {
-        return next(new ConflictErr('Пользователь с таким email уже зарегестрирован'));
-      } if (err.name === 'ValidationError') {
-        return next(new BadRequestErr('Некорректные данные'));
+        next(new ConflictErr('Пользователь с таким email уже зарегистрирован'));
+      } else if (err.name === 'ValidationError') {
+        next(new BadRequestErr('Переданы некорректные данные'));
+      } else {
+        next(err);
       }
-      next(err);
     });
 };
 
