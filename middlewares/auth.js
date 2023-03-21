@@ -3,8 +3,8 @@ const UnauthorizedErr = require('../errors/UnauthorizedErr');
 
 const auth = (req, res, next) => {
   const { authorization } = req.headers;
-  if (!authorization || !authorization.startsWith('Bearer')) {
-    return new UnauthorizedErr();
+  if (!authorization || !authorization.startsWith('Bearer ')) {
+    return next(new UnauthorizedErr('Необходима авторизация'));
   }
 
   const jwt = authorization.replace('Bearer ', '');
@@ -12,7 +12,7 @@ const auth = (req, res, next) => {
   try {
     payload = jsonwebtoken.verify(jwt, 'secret-key');
   } catch (err) {
-    return new UnauthorizedErr();
+    return next(new UnauthorizedErr('Необходима авторизация'));
   }
   req.user = payload;
   return next();

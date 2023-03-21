@@ -2,16 +2,16 @@ const express = require('express');
 const mongoose = require('mongoose');
 const helmet = require('helmet');
 const bodyParser = require('body-parser');
-const { celebrate, Joi } = require('celebrate');
+const { celebrate, Joi, errors } = require('celebrate');
 
 const { login, createUser } = require('./controllers/users');
 
 const app = express();
 app.use(bodyParser.json());
 
+const auth = require('./middlewares/auth');
 const routeUsers = require('./routes/users');
 const routeCards = require('./routes/cards');
-const auth = require('./middlewares/auth');
 
 mongoose.connect('mongodb://127.0.0.1:27017/mestodb');
 
@@ -41,10 +41,15 @@ app.use(helmet());
 app.use(routeUsers);
 app.use(routeCards);
 
-app.use((req, res) => {
-  res
-    .status(404)
-    .send({ message: 'Страницы по запрошенному URL не существует' });
+app.use(errors());
+app.use((err, req, res, next) => {
+  const { statusCode = 500, message } = err;
+  res.status(statusCode).send({
+    message: statusCode === 500
+      ? 'На сервере произошла ошибка'
+      : message,
+  });
+  next();
 });
 
 app.listen(PORT);
