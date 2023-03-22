@@ -13,8 +13,8 @@ const {
 router.get('/users', getUsers);
 router.get('/users/me', getCurrentUser);
 
-router.get('/users/me/:userId', celebrate({
-  params: Joi.object().keys({
+router.get('/users/:userId', celebrate({
+  body: Joi.object().keys({
     id: Joi.string().length(24).hex().required(),
   }),
 }), getUser);
