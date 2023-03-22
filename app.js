@@ -12,11 +12,11 @@ app.use(bodyParser.json());
 const auth = require('./middlewares/auth');
 const routeUsers = require('./routes/users');
 const routeCards = require('./routes/cards');
+const NotFoundErr = require('./errors/NotFoundErr');
 
 mongoose.connect('mongodb://127.0.0.1:27017/mestodb');
 
 const { PORT = 3000 } = process.env;
-const URL = /https?:\/\/(www\.)?[-a-zA-Z0-9@:%._+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b([-a-zA-Z0-9()@:%_+.~#?&//=]*)/;
 
 app.post('/signin', celebrate({
   body: Joi.object().keys({
@@ -29,7 +29,7 @@ app.post('/signup', celebrate({
   body: Joi.object().keys({
     name: Joi.string().min(2).max(30),
     about: Joi.string().min(2).max(30),
-    avatar: Joi.string().pattern(URL),
+    avatar: Joi.string().pattern(/https?:\/\/(www\.)?[-a-zA-Z0-9@:%._+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b([-a-zA-Z0-9()@:%_+.~#?&//=]*)/),
     email: Joi.string().required().email(),
     password: Joi.string().required(),
   }),
@@ -40,6 +40,9 @@ app.use(helmet());
 
 app.use(routeUsers);
 app.use(routeCards);
+app.use((req, res, next) => {
+  next(new NotFoundErr('Такой страницы не существует'));
+});
 
 app.use(errors());
 app.use((err, req, res, next) => {
