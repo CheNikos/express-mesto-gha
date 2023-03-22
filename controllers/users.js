@@ -17,7 +17,13 @@ const createUser = (req, res, next) => {
     .then((hash) => userSchema.create({
       name, about, avatar, email, password: hash,
     }))
-    .then((user) => res.send(user))
+    .then(() => res.send({
+      name,
+      about,
+      avatar,
+      email,
+      password,
+    }))
     .catch((err) => {
       if (err.code === 11000) {
         next(new ConflictErr('Пользователь с таким email уже зарегистрирован'));

@@ -7,6 +7,7 @@ const { celebrate, Joi, errors } = require('celebrate');
 const { login, createUser } = require('./controllers/users');
 
 const app = express();
+app.use(helmet());
 app.use(bodyParser.json());
 
 const auth = require('./middlewares/auth');
@@ -36,15 +37,16 @@ app.post('/signup', celebrate({
 }), createUser);
 
 app.use(auth);
-app.use(helmet());
 
 app.use(routeUsers);
 app.use(routeCards);
+
 app.use((req, res, next) => {
   next(new NotFoundErr('Такой страницы не существует'));
 });
 
 app.use(errors());
+
 app.use((err, req, res, next) => {
   const { statusCode = 500, message } = err;
   res.status(statusCode).send({
