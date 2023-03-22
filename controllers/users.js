@@ -84,16 +84,17 @@ const getUser = (req, res, next) => {
   userSchema
     .findById(userId)
     .then((user) => {
-      if (user) return res.send(user);
-
-      throw new NotFoundErr('Пользователь с таким id не найден');
+      if (!user) {
+        throw new NotFoundErr('Пользователь с таким id не найден');
+      }
+      return res.send(user);
     })
     .catch((err) => {
       if (err.name === 'CastError') {
-        next(new BadRequestErr('Передан некорректный id'));
-      } else {
-        next(err);
+        next(new BadRequestErr('Передан некорретный Id'));
+        return;
       }
+      next(err);
     });
 };
 
