@@ -26,21 +26,46 @@ const createCard = (req, res, next) => {
     });
 };
 
-const deleteCard = (req, res) => {
-  const { cardId } = req.params;
+// const deleteCard = (req, res) => {
+//   const { cardId } = req.params;
 
+//   cardSchema
+//     .findById(cardId)
+//     .then((card) => {
+//       if (!card) {
+//         throw new NotFoundErr('Карточка с указанным id не найдена');
+//       }
+//       if (!(card.owner.equals(req.user._id.toString()))) {
+//         throw new ForbiddenErr('Чужая карточка не может быть удалена');
+//       }
+//       throw card.findByIdAndRemove().then(() => res.send({ message: 'Карточка удалена' }));
+//     })
+//     .catch(() => new NotFoundErr('Переданы некорректные данные карточки'));
+// };
+
+const deleteCard = (req, res, next) => {
   cardSchema
-    .findById(cardId)
+    .findById(req.params.cardId)
+    .orFail(() => {
+      throw new NotFoundErr('Карточка с указанным id не найдена');
+    })
     .then((card) => {
-      if (!card) {
-        throw new NotFoundErr('Карточка с указанным id не найдена');
-      }
-      if (!(card.owner.equals(req.user._id.toString()))) {
+      const owner = card.owner.toString();
+      if (req.user._id === owner) {
+        cardSchema.deleteOne(card)
+          .then(() => { res.send({ message: 'Карточка удалена' }); })
+          .catch(next);
+      } else {
         throw new ForbiddenErr('Чужая карточка не может быть удалена');
       }
-      throw card.findByIdAndRemove().then(() => res.send({ message: 'Карточка удалена' }));
     })
-    .catch(() => new NotFoundErr('Переданы некорректные данные карточки'));
+    .catch((err) => {
+      if (err.name === 'ValidationError') {
+        next(new BadRequestErr('Переданы некорректные данные карточки'));
+      } else {
+        next(err);
+      }
+    });
 };
 
 const likeCard = (req, res, next) => {
