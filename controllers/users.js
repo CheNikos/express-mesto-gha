@@ -50,7 +50,7 @@ const login = (req, res, next) => {
     }))
     .then((user) => {
       const jwt = jsonwebtoken.sign({ _id: user._id }, 'secret-key', { expiresIn: '7d' });
-      res.send({ user, jwt });
+      res.send({ jwt });
     })
     .catch(next);
 };
@@ -58,17 +58,16 @@ const login = (req, res, next) => {
 const getCurrentUser = (req, res, next) => {
   userSchema.findById(req.user._id)
     .then((user) => {
-      if (!user) {
-        throw new NotFoundErr('Пользователь не найден');
-      }
-      res.status(200).send(user);
+      if (user) return res.send(user);
+
+      throw new NotFoundErr('Пользователь с таким id не найден');
     })
     .catch((err) => {
       if (err.name === 'CastError') {
-        next(BadRequestErr('Переданы неверные данные'));
-      } else if (err.message === 'NotFound') {
-        next(new NotFoundErr('Пользователь не найден'));
-      } else next(err);
+        next(new BadRequestErr('Передан некорректный id'));
+      } else {
+        next(err);
+      }
     });
 };
 
