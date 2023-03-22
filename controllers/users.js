@@ -22,7 +22,6 @@ const createUser = (req, res, next) => {
       about,
       avatar,
       email,
-      password,
     }))
     .catch((err) => {
       if (err.code === 11000) {
