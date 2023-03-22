@@ -60,16 +60,17 @@ const likeCard = (req, res, next) => {
       },
     )
     .then((card) => {
-      if (card) return res.send(card);
-
-      throw new NotFoundErr('Карточка с указанным id не найдена');
+      if (!card) {
+        throw new NotFoundErr('Пользователь с таким id не найден');
+      }
+      return res.send(card);
     })
     .catch((err) => {
       if (err.name === 'ValidationError') {
-        next(new BadRequestErr('Переданы некорректные данные при добавлении лайка'));
-      } else {
-        next(err);
+        next(new BadRequestErr('Передан некорретный Id'));
+        return;
       }
+      next(err);
     });
 };
 
