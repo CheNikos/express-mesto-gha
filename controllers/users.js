@@ -58,16 +58,17 @@ const login = (req, res, next) => {
 const getCurrentUser = (req, res, next) => {
   userSchema.findById(req.user._id)
     .then((user) => {
-      if (user) return res.send(user);
-
-      throw new NotFoundErr('Пользователь с таким id не найден');
+      if (!user) {
+        throw new NotFoundErr('Пользователь не найден');
+      }
+      res.status(200).send(user);
     })
     .catch((err) => {
       if (err.name === 'CastError') {
-        next(new BadRequestErr('Передан некорректный id'));
-      } else {
-        next(err);
-      }
+        next(BadRequestErr('Переданы неверные данные'));
+      } else if (err.message === 'NotFound') {
+        next(new NotFoundErr('Пользователь не найден'));
+      } else next(err);
     });
 };
 
