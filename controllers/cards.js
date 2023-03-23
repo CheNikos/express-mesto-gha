@@ -26,23 +26,6 @@ const createCard = (req, res, next) => {
     });
 };
 
-// const deleteCard = (req, res) => {
-//   const { cardId } = req.params;
-
-//   cardSchema
-//     .findById(cardId)
-//     .then((card) => {
-//       if (!card) {
-//         throw new NotFoundErr('Карточка с указанным id не найдена');
-//       }
-//       if (!(card.owner.equals(req.user._id.toString()))) {
-//         throw new ForbiddenErr('Чужая карточка не может быть удалена');
-//       }
-//       throw card.findByIdAndRemove().then(() => res.send({ message: 'Карточка удалена' }));
-//     })
-//     .catch(() => new NotFoundErr('Переданы некорректные данные карточки'));
-// };
-
 const deleteCard = (req, res, next) => {
   cardSchema
     .findById(req.params.cardId)
@@ -60,7 +43,7 @@ const deleteCard = (req, res, next) => {
       }
     })
     .catch((err) => {
-      if (err.name === 'ValidationError') {
+      if (err) {
         next(new BadRequestErr('Переданы некорректные данные карточки'));
       } else {
         next(err);
@@ -86,12 +69,12 @@ const likeCard = (req, res, next) => {
     )
     .then((card) => {
       if (!card) {
-        throw new NotFoundErr('Пользователь с таким id не найден');
+        throw new NotFoundErr('Карточка с таким id не найдена');
       }
       return res.send(card);
     })
     .catch((err) => {
-      if (err.name === 'ValidationError') {
+      if (err) {
         next(new BadRequestErr('Передан некорретный Id'));
         return;
       }
@@ -121,7 +104,7 @@ const dislikeCard = (req, res, next) => {
       throw new NotFoundErr('Данные по указанному id не найдены');
     })
     .catch((err) => {
-      if (err.name === 'ValidationError') {
+      if (err) {
         next(new BadRequestErr('Переданы некорректные данные при снятии лайка'));
       } else {
         next(err);
