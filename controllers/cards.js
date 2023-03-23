@@ -43,7 +43,7 @@ const deleteCard = (req, res, next) => {
       }
     })
     .catch((err) => {
-      if (err) {
+      if (err.name === 'CastError') {
         next(new BadRequestErr('Переданы некорректные данные карточки'));
       } else {
         next(err);
@@ -74,7 +74,7 @@ const likeCard = (req, res, next) => {
       return res.send(card);
     })
     .catch((err) => {
-      if (err) {
+      if (err.name === 'CastError') {
         next(new BadRequestErr('Передан некорретный Id'));
         return;
       }
@@ -104,7 +104,7 @@ const dislikeCard = (req, res, next) => {
       throw new NotFoundErr('Данные по указанному id не найдены');
     })
     .catch((err) => {
-      if (err) {
+      if (err.name === 'CastError') {
         next(new BadRequestErr('Переданы некорректные данные при снятии лайка'));
       } else {
         next(err);
